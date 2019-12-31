@@ -3,7 +3,6 @@ using Prism.Mvvm;
 using Prism.Navigation;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace XamapenCvCam.ViewModels
 {
@@ -11,12 +10,12 @@ namespace XamapenCvCam.ViewModels
     {
         protected INavigationService NavigationService { get; private set; }
 
-        private string _title;
         public string Title
         {
-            get { return _title; }
-            set { SetProperty(ref _title, value); }
+            get => _title;
+            set => SetProperty(ref _title, value);
         }
+        private string _title;
 
         public ViewModelBase(INavigationService navigationService)
         {
