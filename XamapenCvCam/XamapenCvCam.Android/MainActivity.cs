@@ -16,6 +16,9 @@ namespace XamapenCvCam.Droid
 
             base.OnCreate(bundle);
 
+            // for Media Plugin
+            Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, bundle);
+
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App(new AndroidInitializer()));
         }

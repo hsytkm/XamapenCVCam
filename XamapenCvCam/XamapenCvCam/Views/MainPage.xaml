@@ -4,8 +4,17 @@
              x:Class="XamapenCvCam.Views.MainPage"
              Title="{Binding Title}">
 
-    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-        <Label Text="Welcome to Xamarin Forms and Prism!" />
+    <StackLayout VerticalOptions="Fill" >
+        <Button Text="Take Photo"
+                Command="{Binding TakePhotoCommand, Mode=OneTime}"/>
+        
+        <Button Text="Take Video"
+                Command="{Binding TakeVideoCommand, Mode=OneTime}"/>
+
+        <Image HorizontalOptions="Fill"
+               VerticalOptions="Fill"
+               Source="{Binding TakeImage, Mode=OneWay}" />
+
     </StackLayout>
 
 </ContentPage>
