@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "XamapenCvCam": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
