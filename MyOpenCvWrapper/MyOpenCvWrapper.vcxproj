@@ -67,6 +67,8 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>Clang_5_0</PlatformToolset>
+    <AndroidAPILevel>android-21</AndroidAPILevel>
+    <UseOfStl>c++_shared</UseOfStl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -77,6 +79,9 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>Clang_5_0</PlatformToolset>
+    <AndroidAPILevel>android-26</AndroidAPILevel>
+    <UseOfStl>c++_static</UseOfStl>
+    <ThumbMode>Disabled</ThumbMode>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -108,7 +113,13 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>C:\opencv\build1\install\sdk\native\jni\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <LibraryDependencies>C:\opencv\build4\install\sdk\native\staticlibs\armeabi-v7a\libopencv_calib3d.a;C:\opencv\build4\install\sdk\native\staticlibs\armeabi-v7a\libopencv_core.a;C:\opencv\build4\install\sdk\native\staticlibs\armeabi-v7a\libopencv_dnn.a;C:\opencv\build4\install\sdk\native\staticlibs\armeabi-v7a\libopencv_features2d.a;C:\opencv\build4\install\sdk\native\staticlibs\armeabi-v7a\libopencv_flann.a;C:\opencv\build4\install\sdk\native\staticlibs\armeabi-v7a\libopencv_highgui.a;C:\opencv\build4\install\sdk\native\staticlibs\armeabi-v7a\libopencv_imgcodecs.a;C:\opencv\build4\install\sdk\native\staticlibs\armeabi-v7a\libopencv_imgproc.a;C:\opencv\build4\install\sdk\native\staticlibs\armeabi-v7a\libopencv_ml.a;C:\opencv\build4\install\sdk\native\staticlibs\armeabi-v7a\libopencv_objdetect.a;C:\opencv\build4\install\sdk\native\staticlibs\armeabi-v7a\libopencv_photo.a;C:\opencv\build4\install\sdk\native\staticlibs\armeabi-v7a\libopencv_stitching.a;C:\opencv\build4\install\sdk\native\staticlibs\armeabi-v7a\libopencv_video.a;C:\opencv\build4\install\sdk\native\staticlibs\armeabi-v7a\libopencv_videoio.a;C:\opencv\build4\install\sdk\native\3rdparty\libs\armeabi-v7a\libcpufeatures.a;C:\opencv\build4\install\sdk\native\3rdparty\libs\armeabi-v7a\libIlmImf.a;C:\opencv\build4\install\sdk\native\3rdparty\libs\armeabi-v7a\libittnotify.a;C:\opencv\build4\install\sdk\native\3rdparty\libs\armeabi-v7a\liblibjasper.a;C:\opencv\build4\install\sdk\native\3rdparty\libs\armeabi-v7a\liblibjpeg-turbo.a;C:\opencv\build4\install\sdk\native\3rdparty\libs\armeabi-v7a\liblibpng.a;C:\opencv\build4\install\sdk\native\3rdparty\libs\armeabi-v7a\liblibprotobuf.a;C:\opencv\build4\install\sdk\native\3rdparty\libs\armeabi-v7a\liblibtiff.a;C:\opencv\build4\install\sdk\native\3rdparty\libs\armeabi-v7a\liblibwebp.a;C:\opencv\build4\install\sdk\native\3rdparty\libs\armeabi-v7a\libquirc.a;C:\opencv\build4\install\sdk\native\3rdparty\libs\armeabi-v7a\libtegra_hal.a;%(LibraryDependencies)</LibraryDependencies>
+      <AdditionalOptions>-lm -lz %(AdditionalOptions)</AdditionalOptions>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -120,7 +131,13 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>C:\opencv\build1\install\sdk\native\jni\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <LibraryDependencies>C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_core.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_calib3d.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_dnn.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_features2d.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_flann.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_highgui.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_imgcodecs.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_imgproc.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_ml.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_objdetect.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_photo.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_stitching.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_video.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_videoio.a;%(LibraryDependencies)</LibraryDependencies>
+      <AdditionalOptions>-lm -lz %(AdditionalOptions)</AdditionalOptions>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
@@ -132,7 +149,15 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>C:\dev\opencv\opencv-4.2.0_build\install\sdk\native\jni\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\dev\opencv\opencv-4.2.0_build\install\sdk\native\libs\arm64-v8a;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <LibraryDependencies>opencv_calib3d;opencv_core;opencv_dnn;opencv_features2d;opencv_flann;opencv_highgui;opencv_imgcodecs;opencv_imgproc;opencv_ml;opencv_objdetect;opencv_photo;opencv_stitching;opencv_video;opencv_videoio;%(LibraryDependencies)</LibraryDependencies>
+      <SharedLibrarySearchPath>%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
+      <AdditionalOptions>-lm -lz %(AdditionalOptions)</AdditionalOptions>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
@@ -144,7 +169,13 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>C:\opencv\build5\install\sdk\native\jni\include</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <LibraryDependencies>C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_calib3d.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_core.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_dnn.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_features2d.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_flann.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_highgui.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_imgcodecs.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_imgproc.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_ml.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_objdetect.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_photo.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_stitching.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_video.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_videoio.so;%(LibraryDependencies)</LibraryDependencies>
+      <AdditionalOptions>-lm -lz %(AdditionalOptions)</AdditionalOptions>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>

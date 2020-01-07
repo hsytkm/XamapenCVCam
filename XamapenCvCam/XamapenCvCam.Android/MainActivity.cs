@@ -12,13 +12,13 @@ namespace XamapenCvCam.Droid
     [Activity(Label = "XamapenCvCam", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        private const string LibMySharedObject = "MyOpenCvWrapper"; // "libMySharedObject.so" でもOK
+        private const string LibMySharedObject = "MyOpenCvWrapper"; // "libMyOpenCvWrapper.so" でもOK
 
         [DllImport(LibMySharedObject)]
         private static extern int GetMyInt();
 
-        [DllImport(LibMySharedObject)]   // "libMySharedObject.so" でもOK
-        private static extern double GetImageAverage();
+        [DllImport(LibMySharedObject)]
+        private static extern double GetMatMeanY(int black_length, int white_length);
 
         [DllImport(LibMySharedObject, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -50,8 +50,11 @@ namespace XamapenCvCam.Droid
 
             int a0 = GetMyInt();
             var s1 = GetStringWrapper(GetString);
-            var a1 = GetImageAverage();
 
+            // 黒画像と白画像の割合を指定して、平均輝度値を求める
+            var y0 = GetMatMeanY(1, 1);     // 255 * 1/2 = 127.5
+            var y1 = GetMatMeanY(2, 1);     // 255 * 1/3 =  85.0
+            var y2 = GetMatMeanY(200, 300); // 255 * 3/5 = 153.0
         }
 
         // for Media Plugin

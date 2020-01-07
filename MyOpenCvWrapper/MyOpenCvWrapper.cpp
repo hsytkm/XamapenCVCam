@@ -1,33 +1,27 @@
 #include "MyOpenCvWrapper.h"
 
-MyOpenCvWrapper::MyOpenCvWrapper()
-{
-}
-
-MyOpenCvWrapper::~MyOpenCvWrapper()
-{
-}
-
-
+#include <opencv2/core.hpp>
 
 #define DllExport extern "C"
 
-#if 1
-DllExport double GetImageAverage() {
-    return 12.34;
-}
-#else
-DllExport double GetImageAverage() {
-    cv::Mat img1 = cv::Mat::zeros(500, 500, CV_8UC1);
+DllExport double GetMatMeanY(int black_length, int white_length) {
+	int row = 100;
 
-    return cv::mean(img1)[0];
+	// 1. 引数で指定された割合で、単色の黒/白 Mat を作成
+	cv::Mat brack = cv::Mat::zeros(row, black_length, CV_8UC1);
+	cv::Mat white(row, white_length, CV_8UC1, cv::Scalar(255, 255, 255));
+
+	// 2. サイドバイサイドで 2つのMat を結合
+	cv::Mat merge;
+	hconcat(brack, white, merge);
+
+	// 3. 結合したMatの平均輝度値を求める（単色なので輝度(Y)と呼べない気もする）
+	return cv::mean(merge)[0];
 }
-#endif
 
 DllExport int GetMyInt() {
 	return 321;
 }
-
 
 bool SetStringToCharArraySub(char* dest, int destLength, const char* src, int srcLength) {
 	if (destLength < 1) return true;
