@@ -12,9 +12,6 @@ namespace XamapenCvCam.Views
         [DllImport(LibMySharedObject)]  
         private static extern int GetMyInt();
 
-        [DllImport(LibMySharedObject)]   // "libMySharedObject.so" でもOK
-        private static extern double GetImageAverage();
-
         [DllImport(LibMySharedObject, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private extern static bool GetString([MarshalAs(UnmanagedType.LPUTF8Str), Out] StringBuilder str, int length);
@@ -35,7 +32,6 @@ namespace XamapenCvCam.Views
 
             int a0 = GetMyInt();
             var s1 = GetStringWrapper(GetString);
-            var a1 = GetImageAverage();
 
             DisplayAlert("Title", s1, "OK");
 
