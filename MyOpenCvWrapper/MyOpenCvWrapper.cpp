@@ -2,8 +2,6 @@
 
 #include <opencv2/core.hpp>
 
-#define DllExport extern "C"
-
 DllExport double GetMatMeanY(int black_length, int white_length) {
 	int row = 100;
 

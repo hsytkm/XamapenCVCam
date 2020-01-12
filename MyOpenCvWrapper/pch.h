@@ -6,3 +6,5 @@
 #include <sys/resource.h>
 
 #include <android/log.h>
+
+#define DllExport extern "C"
