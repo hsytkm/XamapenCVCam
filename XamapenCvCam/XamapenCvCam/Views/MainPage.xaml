@@ -5,11 +5,17 @@
              Title="{Binding Title}">
 
     <StackLayout VerticalOptions="Fill" >
-        <Button Text="Take Photo"
-                Command="{Binding TakePhotoCommand, Mode=OneTime}"/>
-        
-        <Button Text="Take Video"
-                Command="{Binding TakeVideoCommand, Mode=OneTime}"/>
+        <StackLayout Orientation="Horizontal" >
+            <Button Text="Take Photo"
+                    Command="{Binding TakePhotoCommand, Mode=OneTime}" />
+
+            <Button Text="Take Video"
+                    Command="{Binding TakeVideoCommand, Mode=OneTime}" />
+        </StackLayout>
+
+        <Button Text="Take Photo To Nega by OpenCv"
+                HeightRequest="80"
+                Command="{Binding TakeNegaPhotoCommand, Mode=OneTime}" />
 
         <Image HorizontalOptions="Fill"
                VerticalOptions="Fill"

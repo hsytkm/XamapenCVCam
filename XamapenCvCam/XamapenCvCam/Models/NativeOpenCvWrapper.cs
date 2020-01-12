@@ -13,7 +13,8 @@ namespace XamapenCvCam.Models
 
         [DllImport(LibMySharedObject, CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        private extern static bool GetString([MarshalAs(UnmanagedType.LPUTF8Str), Out] StringBuilder str, int length);
+        private extern static bool GetString(
+            [MarshalAs(UnmanagedType.LPUTF8Str), Out] StringBuilder str, int length);
 
         private static string GetStringWrapper(Func<StringBuilder, int, bool> func, int maxLength = 256)
         {

@@ -114,13 +114,15 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)OpenCV-android-sdk\4.2.0\sdk\native\jni\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <LibraryDependencies>opencv_calib3d;opencv_core;opencv_dnn;opencv_features2d;opencv_flann;opencv_highgui;opencv_imgcodecs;opencv_imgproc;opencv_ml;opencv_objdetect;opencv_photo;opencv_stitching;opencv_video;opencv_videoio;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
       <AdditionalOptions>-lm -lz %(AdditionalOptions)</AdditionalOptions>
-      <SharedLibrarySearchPath>$(SolutionDir)OpenCV-android-sdk\4.2.0\sdk\native\3rdparty\libs\arm64-v8a;$(SolutionDir)OpenCV-android-sdk\4.2.0\sdk\native\staticlibs\arm64-v8a;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -133,11 +135,11 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\opencv\build1\install\sdk\native\jni\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <LibraryDependencies>C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_core.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_calib3d.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_dnn.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_features2d.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_flann.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_highgui.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_imgcodecs.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_imgproc.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_ml.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_objdetect.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_photo.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_stitching.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_video.a;C:\opencv\build1\install\sdk\native\staticlibs\armeabi-v7a\libopencv_videoio.a;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
       <AdditionalOptions>-lm -lz %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -151,12 +153,12 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\dev\opencv\opencv-4.2.0_build\install\sdk\native\jni\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)OpenCV-android-sdk\4.2.0\sdk\native\jni\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\dev\opencv\opencv-4.2.0_build\install\sdk\native\libs\arm64-v8a;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)OpenCV-android-sdk\4.2.0\sdk\native\staticlibs\arm64-v8a;$(SolutionDir)OpenCV-android-sdk\4.2.0\sdk\native\3rdparty\libs\arm64-v8a;$(SolutionDir)OpenCV-android-sdk\4.2.0\sdk\native\libs\arm64-v8a;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <LibraryDependencies>opencv_calib3d;opencv_core;opencv_dnn;opencv_features2d;opencv_flann;opencv_highgui;opencv_imgcodecs;opencv_imgproc;opencv_ml;opencv_objdetect;opencv_photo;opencv_stitching;opencv_video;opencv_videoio;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>opencv_java4;cpufeatures;IlmImf;ittnotify;libjasper;libjpeg-turbo;libpng;libprotobuf;libtiff;libwebp;quirc;tbb;tegra_hal;opencv_calib3d;opencv_core;opencv_dnn;opencv_features2d;opencv_flann;opencv_highgui;opencv_imgcodecs;opencv_imgproc;opencv_ml;opencv_objdetect;opencv_photo;opencv_stitching;opencv_video;opencv_videoio</LibraryDependencies>
       <SharedLibrarySearchPath>%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalOptions>-lm -lz %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -171,11 +173,12 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\opencv\build5\install\sdk\native\jni\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <LibraryDependencies>C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_calib3d.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_core.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_dnn.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_features2d.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_flann.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_highgui.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_imgcodecs.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_imgproc.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_ml.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_objdetect.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_photo.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_stitching.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_video.so;C:\opencv\build5\install\sdk\native\libs\armeabi-v7a\libopencv_videoio.so;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
       <AdditionalOptions>-lm -lz %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>

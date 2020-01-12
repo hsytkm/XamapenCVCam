@@ -6,6 +6,7 @@ using Prism.Navigation;
 using Prism.Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using XamapenCvCam.Models;
@@ -30,6 +31,7 @@ namespace XamapenCvCam.ViewModels
 
         public DelegateCommand TakePhotoCommand { get; }
         public DelegateCommand TakeVideoCommand { get; }
+        public DelegateCommand TakeNegaPhotoCommand { get; }
 
         public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService)
             : base(navigationService)
@@ -43,15 +45,19 @@ namespace XamapenCvCam.ViewModels
             IsTakeVideoSupported = CrossMedia.Current.IsTakeVideoSupported;
 
             TakePhotoCommand = new DelegateCommand(
-                async () => await TakeNegaPosiPhotoAsync(),
+                async () => await TakePhotoAsync(),
                 () => IsCameraAvailable && IsTakePhotoSupported);
 
             TakeVideoCommand = new DelegateCommand(
                 async () => await TakeVideoAsync(),
                 () => IsCameraAvailable && IsTakeVideoSupported);
+
+            TakeNegaPhotoCommand = new DelegateCommand(
+                async () => await TakeNegaPosiPhotoAsync(),
+                () => IsCameraAvailable && IsTakePhotoSupported);
         }
 
-        private async Task TakeNegaPosiPhotoAsync()
+        private async Task TakePhotoAsync()
         {
             await CrossMedia.Current.Initialize();
 
@@ -63,68 +69,8 @@ namespace XamapenCvCam.ViewModels
                 });
             if (file == null) return;
 
-#if true
-            var controller = new ImageController(file.GetStream());
-
-            var data = controller.GetAverageG();
-
-#else
-            using var stream = file.GetStream();
-            var bitmap = BitmapFactory.DecodeStream(stream);
-
-            ulong sumb = 0, sumg = 0, sumr = 0;
-            var width = bitmap.Width;
-            var height = bitmap.Height;
-
-            var pixels = new int[width * height];
-            bitmap.GetPixels(pixels, 0, width, 0, 0, width, height);
-
-            for (var y = 0; y < height * width; y += width)
-            {
-                for (var x = 0; x < width; x++)
-                {
-                    var p = pixels[y + x];
-                    sumb += (ulong)((p >> 16) & 0xff);
-                    sumg += (ulong)((p >> 8) & 0xff);
-                    sumr += (ulong)(p & 0xff);
-                }
-            }
-
-            double aveb = sumb / (double)(width * height);
-            double aveg = sumg / (double)(width * height);
-            double aver = sumr / (double)(width * height);
-            bitmap.Recycle();
-            bitmap.Dispose();
-#endif
-
-            TakeImage = ImageSource.FromStream(() =>
-            {
-                var stream = file.GetStream();
-                file.Dispose();
-                return stream;
-            });
-
-            await Application.Current.MainPage.DisplayAlert("Title", $"Data={data:f2}", "OK");
-        }
-
-        private async Task TakePhotoAsync()
-        {
-            await CrossMedia.Current.Initialize();
-
-            var file = await CrossMedia.Current.TakePhotoAsync(
-                new Plugin.Media.Abstractions.StoreCameraMediaOptions
-                {
-                    DefaultCamera = Plugin.Media.Abstractions.CameraDevice.Front,
-                    AllowCropping = false,
-                });
-            if (file == null) return;
-
-            TakeImage = ImageSource.FromStream(() =>
-            {
-                var stream = file.GetStream();
-                file.Dispose();
-                return stream;
-            });
+            TakeImage = ImageSource.FromStream(() => file.GetStream());
+            //await Application.Current.MainPage.DisplayAlert("Title", $"{sw}msec", "OK");
         }
 
         private async Task TakeVideoAsync()
@@ -149,6 +95,34 @@ namespace XamapenCvCam.ViewModels
                 file.Dispose();
                 return stream;
             });
+        }
+
+        private async Task TakeNegaPosiPhotoAsync()
+        {
+            await CrossMedia.Current.Initialize();
+
+            using var file = await CrossMedia.Current.TakePhotoAsync(
+                new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                {
+                    DefaultCamera = Plugin.Media.Abstractions.CameraDevice.Front,
+                    AllowCropping = false,
+                });
+            if (file is null) return;
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            using var controller = await ImageController.CreateInstance(file.GetStream());
+
+            //var aveg = controller.GetAverageG();
+            //await Application.Current.MainPage.DisplayAlert("Title", $"AverageG={aveg:f2}", "OK");
+
+            controller.ToNegaPosi();
+
+            TakeImage = controller.GetImageSource();
+
+            sw.Stop();
+            await Application.Current.MainPage.DisplayAlert("Time", $"{sw.ElapsedMilliseconds}ms", "OK");
         }
 
     }
