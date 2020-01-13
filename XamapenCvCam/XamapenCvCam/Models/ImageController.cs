@@ -24,6 +24,9 @@ namespace XamapenCvCam.Models
 
         [DllImport(LibName, EntryPoint = "OpenCv_ToNegaPosi")]
         public static extern void ToNegaPosiOpenCv(ref ImagePixels pixels);
+
+        [DllImport(LibName, EntryPoint = "OpenCv_DrawFaceFrames")]
+        public static extern int DrawFaceFrames(ref ImagePixels pixels);
     }
 
     class ImageController : IDisposable
@@ -65,6 +68,12 @@ namespace XamapenCvCam.Models
             var payload = _imageContainer.Payload;
             //NativeMethods.ToNegaPosiLibTest(ref payload);
             NativeMethods.ToNegaPosiOpenCv(ref payload);
+        }
+
+        public int DrawFaceFrames()
+        {
+            var payload = _imageContainer.Payload;
+            return NativeMethods.DrawFaceFrames(ref payload);
         }
 
         public ImageSource GetImageSource()

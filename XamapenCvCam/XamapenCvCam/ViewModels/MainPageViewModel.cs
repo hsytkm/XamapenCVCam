@@ -32,6 +32,7 @@ namespace XamapenCvCam.ViewModels
         public DelegateCommand TakePhotoCommand { get; }
         public DelegateCommand TakeVideoCommand { get; }
         public DelegateCommand TakeNegaPhotoCommand { get; }
+        public DelegateCommand TakeFacePhotoCommand { get; }
 
         public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService)
             : base(navigationService)
@@ -54,6 +55,10 @@ namespace XamapenCvCam.ViewModels
 
             TakeNegaPhotoCommand = new DelegateCommand(
                 async () => await TakeNegaPosiPhotoAsync(),
+                () => IsCameraAvailable && IsTakePhotoSupported);
+
+            TakeFacePhotoCommand = new DelegateCommand(
+                async () => await TakeFaceDetectPhotoAsync(),
                 () => IsCameraAvailable && IsTakePhotoSupported);
         }
 
@@ -124,6 +129,36 @@ namespace XamapenCvCam.ViewModels
             var messages = new[]
             {
                 $"SourceSize= {controller.SourceWidth} x {controller.SourceHeight}",
+                $"Time= {sw.ElapsedMilliseconds}msec",
+            };
+            await Application.Current.MainPage.DisplayAlert("Info",
+                string.Join(Environment.NewLine, messages), "OK");
+        }
+
+        private async Task TakeFaceDetectPhotoAsync()
+        {
+            await CrossMedia.Current.Initialize();
+
+            using var file = await CrossMedia.Current.TakePhotoAsync(
+                new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                {
+                    DefaultCamera = Plugin.Media.Abstractions.CameraDevice.Front,
+                    AllowCropping = false,
+                });
+            if (file is null) return;
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            using var controller = await ImageController.CreateInstance(file.GetStream());
+            var faceNum = controller.DrawFaceFrames();
+            TakeImage = controller.GetImageSource();
+            sw.Stop();
+
+            var messages = new[]
+            {
+                $"SourceSize= {controller.SourceWidth} x {controller.SourceHeight}",
+                $"FaceNum={faceNum}",
                 $"Time= {sw.ElapsedMilliseconds}msec",
             };
             await Application.Current.MainPage.DisplayAlert("Info",

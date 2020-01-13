@@ -13,9 +13,15 @@
                     Command="{Binding TakeVideoCommand, Mode=OneTime}" />
         </StackLayout>
 
-        <Button Text="Take Photo To Nega by OpenCv"
-                HeightRequest="80"
-                Command="{Binding TakeNegaPhotoCommand, Mode=OneTime}" />
+        <StackLayout Orientation="Horizontal" >
+            <Button Text="Nega Photo(OpenCv)"
+                    HeightRequest="80"
+                    Command="{Binding TakeNegaPhotoCommand, Mode=OneTime}" />
+            
+            <Button Text="Face Detect(OpenCv)"
+                    HeightRequest="80"
+                    Command="{Binding TakeFacePhotoCommand, Mode=OneTime}" />
+        </StackLayout>
 
         <Image HorizontalOptions="Fill"
                VerticalOptions="Fill"
