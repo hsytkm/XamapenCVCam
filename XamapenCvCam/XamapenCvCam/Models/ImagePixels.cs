@@ -29,6 +29,57 @@ namespace XamapenCvCam.Models
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    internal readonly struct BitmapHeader
+    {
+        // Bitmap File Header
+        public readonly Int16 FileType;
+        public readonly Int32 FileSize;
+        public readonly Int16 Reserved1;
+        public readonly Int16 Reserved2;
+        public readonly Int32 OffsetBytes;
+
+        // Bitmap Information Header
+        public readonly Int32 InfoSize;
+        public readonly Int32 Width;
+        public readonly Int32 Height;
+        public readonly Int16 Planes;
+        public readonly Int16 BitCount;
+        public readonly Int32 Compression;
+        public readonly Int32 SizeImage;
+        public readonly Int32 XPixPerMete;
+        public readonly Int32 YPixPerMete;
+        public readonly Int32 ClrUsed;
+        public readonly Int32 CirImportant;
+
+        public BitmapHeader(int width, int height, int pixelsSize)
+        {
+            var fileHeaderSize = 14;
+            var infoHeaderSize = 40; 
+            var totalHeaderSize = fileHeaderSize + infoHeaderSize;
+            var fileSize = totalHeaderSize + pixelsSize;
+
+            FileType = 0x4d42;  // 'B','M'
+            FileSize = fileSize;
+            Reserved1 = 0;
+            Reserved2 = 0;
+            OffsetBytes = totalHeaderSize;
+
+            InfoSize = infoHeaderSize;
+            Width = width;
+            Height = height;
+            Planes = 1;
+            BitCount = 32;
+            Compression = 0;
+            SizeImage = pixelsSize;
+            XPixPerMete = 0;
+            YPixPerMete = 0;
+            ClrUsed = 0;
+            CirImportant = 0;
+        }
+    }
+
+    // Bitmap File Format http://www.umekkii.jp/data/computer/file_format/bitmap.cgi
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal readonly struct ImagePixelsContainer : IDisposable
     {
         private readonly IntPtr UnmanagedPtr;
@@ -53,41 +104,50 @@ namespace XamapenCvCam.Models
             Payload = new ImagePixels(width, height, bytesPerPixel, stride, UnmanagedPtr);
         }
 
-        // https://www.sawalemontea.com/entry/2018/04/29/183000
-        private byte[] MakeBuffer()
+        public void Dispose()
         {
-            var pixels = Payload;
+            if (UnmanagedPtr != IntPtr.Zero)
+                Marshal.FreeHGlobal(UnmanagedPtr);
+        }
+    }
+
+    internal static class ImagePixelsExtensions
+    {
+        public static ImageSource ToImageSource(this in ImagePixels pixels)
+        {
+            var buffer = GetBitmapBuffer(pixels);
+
+            // ◆DisposeしたらExceptionでちゃう。どこで解放したら良いの？？
+            var ms = new MemoryStream(buffer);
+
+            return ImageSource.FromStream(() => ms);
+        }
+
+
+        // https://www.sawalemontea.com/entry/2018/04/29/183000
+        private static byte[] GetBitmapBuffer(in ImagePixels pixels)
+        {
             var width = pixels.Width;
             var height = pixels.Height;
-            var bytesPerPixel = pixels.BytesPerPixel;
             var stride = pixels.Stride;
+            var pixelsSize = pixels.PixelsSize;
 
-            var headerSize = 54;
-            var numPixelBytes = (bytesPerPixel * width) * height;
-            var filesize = headerSize + numPixelBytes;
+            var header = new BitmapHeader(width, height, pixelsSize);
+            var headerSize = Marshal.SizeOf(header);
+            var filesize = headerSize + pixelsSize;
             var buffer = new byte[filesize];
 
             //bufferにheader情報を書き込む
-            using var ms = new MemoryStream(buffer);
-            using var writer = new BinaryWriter(ms, System.Text.Encoding.UTF8);
-
-            writer.Write(new char[] { 'B', 'M' });
-            writer.Write(filesize);
-            writer.Write((short)0);
-            writer.Write((short)0);
-            writer.Write(headerSize);
-
-            writer.Write(40);
-            writer.Write(width);
-            writer.Write(height);
-            writer.Write((short)1);
-            writer.Write((short)32);
-            writer.Write(0);
-            writer.Write(numPixelBytes);
-            writer.Write(0);
-            writer.Write(0);
-            writer.Write(0);
-            writer.Write(0);
+            var ptr = Marshal.AllocHGlobal(headerSize);
+            try
+            {
+                Marshal.StructureToPtr(header, ptr, false);
+                Marshal.Copy(ptr, buffer, 0, headerSize);
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(ptr);
+            }
 
             // 画像は左下から右上に向かって記録する
             var startPtr = pixels.PixelsPtr;
@@ -124,21 +184,8 @@ namespace XamapenCvCam.Models
                     }
                 }
             }
-
             return buffer;
         }
-
-        public ImageSource ToImageSource()
-        {
-            var buffer = MakeBuffer();
-            var ms = new MemoryStream(buffer);  // ◆DisposeしたらExceptionでちゃう
-            return ImageSource.FromStream(() => ms);
-        }
-
-        public void Dispose()
-        {
-            if (UnmanagedPtr != IntPtr.Zero)
-                Marshal.FreeHGlobal(UnmanagedPtr);
-        }
     }
+
 }

@@ -1,6 +1,7 @@
 ﻿using Android.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -12,6 +13,9 @@ namespace XamapenCvCam.Models
     {
         private const string LibName = "MyOpenCvWrapper"; // "libMySharedObject.so" でもOK
 
+        [DllImport(LibName, EntryPoint = "OpenCv_GetInt123")]
+        public static extern int GetInt123();
+        
         [DllImport(LibName, EntryPoint = "OpenCv_GetAverageG")]
         public static extern double GetAverageG(ref ImagePixels pixels);
 
@@ -23,10 +27,8 @@ namespace XamapenCvCam.Models
     {
         private readonly ImagePixelsContainer _imageContainer;
 
-        private ImageController(Bitmap bitmap)
-        {
-            _imageContainer = new ImagePixelsContainer(bitmap);
-        }
+        public int SourceWidth { get; }
+        public int SourceHeight { get; }
 
         public static async Task<ImageController> CreateInstance(Stream stream)
         {
@@ -35,8 +37,18 @@ namespace XamapenCvCam.Models
 
             bitmap.Recycle();
             bitmap.Dispose();
-
             return controller;
+        }
+
+        private ImageController(Bitmap bitmap)
+        {
+            _imageContainer = new ImagePixelsContainer(bitmap);
+
+            SourceWidth = bitmap.Width;
+            SourceHeight = bitmap.Height;
+
+            // lib read test
+            Debug.Assert(123 == NativeMethods.GetInt123());
         }
 
         public double GetAverageG()
@@ -52,9 +64,7 @@ namespace XamapenCvCam.Models
         }
 
         public ImageSource GetImageSource()
-        {
-            return _imageContainer.ToImageSource();
-        }
+            => _imageContainer.Payload.ToImageSource();
 
         #region IDisposable Support
         private bool disposedValue = false; // 重複する呼び出しを検出するには

@@ -118,11 +118,16 @@ namespace XamapenCvCam.ViewModels
             //await Application.Current.MainPage.DisplayAlert("Title", $"AverageG={aveg:f2}", "OK");
 
             controller.ToNegaPosi();
-
             TakeImage = controller.GetImageSource();
-
             sw.Stop();
-            await Application.Current.MainPage.DisplayAlert("Time", $"{sw.ElapsedMilliseconds}ms", "OK");
+
+            var messages = new[]
+            {
+                $"SourceSize= {controller.SourceWidth} x {controller.SourceHeight}",
+                $"Time= {sw.ElapsedMilliseconds}msec",
+            };
+            await Application.Current.MainPage.DisplayAlert("Info",
+                string.Join(Environment.NewLine, messages), "OK");
         }
 
     }
