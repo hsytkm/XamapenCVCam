@@ -1,5 +1,6 @@
 ﻿using Android.Graphics;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using Xamarin.Forms;
@@ -90,13 +91,40 @@ namespace XamapenCvCam.Models
 
             // 画像は左下から右上に向かって記録する
             var startPtr = pixels.PixelsPtr;
-            for (int y = height * stride - 1; y >= 0; y -= stride)
+            var spanPixels = new Span<byte>(buffer).Slice(headerSize);
+            unsafe
             {
-                for (int n = y; n < y + (width * bytesPerPixel); n +=bytesPerPixel)
+                var srcHead = (byte*)startPtr.ToPointer();
+                fixed (byte* destHead = spanPixels)
                 {
-                    writer.Write(Marshal.ReadInt32(startPtr, n));
+                    for (int y = 0; y < height; ++y)
+                    {
+                        var src = srcHead + (height - y - 1) * stride;
+                        var dst = destHead + (y * stride);
+                        var last = dst + stride;
+
+                        while (dst + 7 < last)
+                        {
+                            *(ulong*)dst = *(ulong*)src;
+                            src += 8;
+                            dst += 8;
+                        }
+                        if (dst + 3 < last)
+                        {
+                            *(uint*)dst = *(uint*)src;
+                            src += 4;
+                            dst += 4;
+                        }
+                        while (dst < last)
+                        {
+                            *dst = *src;
+                            ++src;
+                            ++dst;
+                        }
+                    }
                 }
             }
+
             return buffer;
         }
 
