@@ -192,7 +192,9 @@
     <ClCompile Include="OpenCvTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="OpenCvTest.h" />
+    <ClInclude Include="ImagePixels.h" />
+    <ClInclude Include="OpenCvMethods.h" />
+    <ClInclude Include="LibMethods.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

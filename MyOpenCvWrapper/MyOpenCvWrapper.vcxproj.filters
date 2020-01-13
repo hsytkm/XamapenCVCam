@@ -2,7 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="OpenCvTest.h" />
+    <ClInclude Include="ImagePixels.h" />
+    <ClInclude Include="LibMethods.h" />
+    <ClInclude Include="OpenCvMethods.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OpenCvTest.cpp" />

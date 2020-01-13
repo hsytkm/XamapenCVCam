@@ -13,14 +13,17 @@ namespace XamapenCvCam.Models
     {
         private const string LibName = "MyOpenCvWrapper"; // "libMySharedObject.so" でもOK
 
-        [DllImport(LibName, EntryPoint = "OpenCv_GetInt123")]
+        [DllImport(LibName, EntryPoint = "Lib_GetInt123")]
         public static extern int GetInt123();
         
-        [DllImport(LibName, EntryPoint = "OpenCv_GetAverageG")]
+        [DllImport(LibName, EntryPoint = "Lib_GetAverageG")]
         public static extern double GetAverageG(ref ImagePixels pixels);
 
+        [DllImport(LibName, EntryPoint = "Lib_ToNegaPosi")]
+        public static extern void ToNegaPosiLibTest(ref ImagePixels pixels);
+
         [DllImport(LibName, EntryPoint = "OpenCv_ToNegaPosi")]
-        public static extern void ToNegaPosi(ref ImagePixels pixels);
+        public static extern void ToNegaPosiOpenCv(ref ImagePixels pixels);
     }
 
     class ImageController : IDisposable
@@ -60,7 +63,8 @@ namespace XamapenCvCam.Models
         public void ToNegaPosi()
         {
             var payload = _imageContainer.Payload;
-            NativeMethods.ToNegaPosi(ref payload);
+            //NativeMethods.ToNegaPosiLibTest(ref payload);
+            NativeMethods.ToNegaPosiOpenCv(ref payload);
         }
 
         public ImageSource GetImageSource()
