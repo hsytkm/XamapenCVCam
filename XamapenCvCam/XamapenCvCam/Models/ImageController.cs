@@ -1,8 +1,8 @@
 ﻿using Android.Graphics;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -25,8 +25,9 @@ namespace XamapenCvCam.Models
         [DllImport(LibName, EntryPoint = "OpenCv_ToNegaPosi")]
         public static extern void ToNegaPosiOpenCv(ref ImagePixels pixels);
 
-        [DllImport(LibName, EntryPoint = "OpenCv_DrawFaceFrames")]
-        public static extern int DrawFaceFrames(ref ImagePixels pixels);
+        [DllImport(LibName, EntryPoint = "OpenCv_DrawFaceFrames", CharSet = CharSet.Unicode)]
+        public static extern int DrawFaceFrames(ref ImagePixels pixels,
+            [MarshalAs(UnmanagedType.LPUTF8Str), In]string path);
     }
 
     class ImageController : IDisposable
@@ -70,11 +71,43 @@ namespace XamapenCvCam.Models
             NativeMethods.ToNegaPosiOpenCv(ref payload);
         }
 
+        #region FaceDetect
+        private readonly static string FaceCascadeFilename =
+            "haarcascade_frontalface_alt.xml";
+
+        private readonly static string FaceCascadeResourcePath =
+            $"XamapenCvCam.Resources.{FaceCascadeFilename}";
+
+        private static string PrepareFaceCascadeFile()
+        {
+            var dir = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            string dstPath = System.IO.Path.Combine(dir, FaceCascadeFilename);
+
+            //new FileInfo(dstPath).Delete(); // for test
+
+            if (!File.Exists(dstPath))
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var stream = assembly.GetManifestResourceStream(FaceCascadeResourcePath);
+                using var src = new StreamReader(stream);
+                using var dst = new StreamWriter(dstPath);
+
+                while (src.Peek() >= 0)
+                    dst.WriteLine(src.ReadLine());
+            }
+            return dstPath;
+        }
+
         public int DrawFaceFrames()
         {
+            // 顔検出用ファイルの準備(リソースを端末内に保存)
+            var cascadePath = PrepareFaceCascadeFile();
+            if (string.IsNullOrEmpty(cascadePath)) return -1;
+
             var payload = _imageContainer.Payload;
-            return NativeMethods.DrawFaceFrames(ref payload);
+            return NativeMethods.DrawFaceFrames(ref payload, cascadePath);
         }
+        #endregion
 
         public ImageSource GetImageSource()
             => _imageContainer.Payload.ToImageSource();

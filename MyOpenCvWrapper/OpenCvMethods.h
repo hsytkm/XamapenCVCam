@@ -58,23 +58,23 @@ DllExport void OpenCv_ToNegaPosi(ImagePixels& pixels) {
 	UpdateMatPixels(mat, pixels.PixelsPtr, pixels.PixelsSize);
 }
 
-DllExport int OpenCv_DrawFaceFrames(ImagePixels& pixels) {
+DllExport int OpenCv_DrawFaceFrames(ImagePixels& pixels, const char* c_path) {
+	std::string path(c_path);
 	cv::Mat mat = ToMat(pixels);
 
 	cv::CascadeClassifier cascade;
-	cascade.load("res/xml/haarcascade_frontalface_alt.xml");
+	cascade.load(path);		// "haarcascade_frontalface_alt.xml"
 
 	std::vector<cv::Rect> faces;
 	cascade.detectMultiScale(mat, faces, 1.1, 3, 0, cv::Size(20, 20));
 
 	int face_num = static_cast<int>(faces.size());
-
 	for (int i = 0; i < face_num; i++)
 	{
 		cv::rectangle(mat,
 			cv::Point(faces[i].x, faces[i].y),
 			cv::Point(faces[i].x + faces[i].width, faces[i].y + faces[i].height),
-			cv::Scalar(0, 0, 255), 3);
+			cv::Scalar(0, 255, 0), 20);
 	}
 
 	// “ü—Íƒƒ‚ƒŠ‚É‰æ‘f’l‚ð‘‚«–ß‚·
