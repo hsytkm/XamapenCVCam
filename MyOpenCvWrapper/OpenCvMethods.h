@@ -58,8 +58,8 @@ DllExport void OpenCv_ToNegaPosi(ImagePixels& pixels) {
 	UpdateMatPixels(mat, pixels.PixelsPtr, pixels.PixelsSize);
 }
 
-DllExport int OpenCv_DrawFaceFrames(ImagePixels& pixels, const char* c_path) {
-	std::string path(c_path);
+// 原画サイズのまま顔検出
+int OpenCv_DrawFaceFramesFullSize(ImagePixels& pixels, std::string path) {
 	cv::Mat mat = ToMat(pixels);
 
 	cv::CascadeClassifier cascade;
@@ -68,8 +68,8 @@ DllExport int OpenCv_DrawFaceFrames(ImagePixels& pixels, const char* c_path) {
 	std::vector<cv::Rect> faces;
 	cascade.detectMultiScale(mat, faces, 1.1, 3, 0, cv::Size(20, 20));
 
-	int face_num = static_cast<int>(faces.size());
-	for (int i = 0; i < face_num; i++)
+	int faceNum = static_cast<int>(faces.size());
+	for (int i = 0; i < faceNum; i++)
 	{
 		cv::rectangle(mat,
 			cv::Point(faces[i].x, faces[i].y),
@@ -80,5 +80,57 @@ DllExport int OpenCv_DrawFaceFrames(ImagePixels& pixels, const char* c_path) {
 	// 入力メモリに画素値を書き戻す
 	UpdateMatPixels(mat, pixels.PixelsPtr, pixels.PixelsSize);
 
-	return face_num;
+	return faceNum;
+}
+
+// 原画を縮小してから顔検出
+int OpenCv_DrawFaceFramesResize(ImagePixels& pixels, std::string path) {
+	cv::Mat src = ToMat(pixels);
+	cv::Mat tmp;
+
+	cv::CascadeClassifier cascade;
+	cascade.load(path);		// "haarcascade_frontalface_alt.xml"
+
+	const int normalizeLengthMax = 320;
+	const int lengthMax = (std::max)({ src.rows, src.cols });
+	const int tickness = lengthMax / 100;
+	double zoomRatio;
+
+	// 元画像をリサイズしてから顔検出する
+	if (normalizeLengthMax < lengthMax) {
+		zoomRatio = static_cast<double>(normalizeLengthMax) / lengthMax;
+		cv::resize(src, tmp, cv::Size(), zoomRatio, zoomRatio);
+	}
+	else {
+		zoomRatio = 1.0;
+		tmp = src.clone();
+	}
+
+	std::vector<cv::Rect> facesSource;
+	cascade.detectMultiScale(tmp, facesSource, 1.1, 3, 0, cv::Size(20, 20));
+
+	int faceNum = static_cast<int>(facesSource.size());
+	for (int i = 0; i < faceNum; i++) {
+		int x = static_cast<int>(std::round(facesSource[i].x / zoomRatio));
+		int y = static_cast<int>(std::round(facesSource[i].y / zoomRatio));
+		int width = static_cast<int>(std::round(facesSource[i].width / zoomRatio));
+		int height = static_cast<int>(std::round(facesSource[i].height / zoomRatio));
+
+		cv::rectangle(src,
+			cv::Point(x, y),
+			cv::Point(x + width, y + height),
+			cv::Scalar(0, 255, 0), 20);
+	}
+
+	// 入力メモリに画素値を書き戻す
+	UpdateMatPixels(src, pixels.PixelsPtr, pixels.PixelsSize);
+
+	return faceNum;
+}
+
+DllExport int OpenCv_DrawFaceFrames(ImagePixels& pixels, const char* c_path) {
+	std::string path(c_path);
+
+	//return OpenCv_DrawFaceFramesFullSize(pixels, path);
+	return OpenCv_DrawFaceFramesResize(pixels, path);
 }
